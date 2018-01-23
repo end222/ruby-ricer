@@ -149,7 +149,7 @@ def urxvt(configFile)
 	configFile.puts
 	configFile.puts "!URxvt configuration"
 	while !correct
-		printf "Do you want to have scrollbar? (y/n): "
+		print "Do you want to have scrollbar? (y/n): "
 		answer = gets
 		if answer.chomp == "y"
 			configFile.puts "URxvt.scrollBar: true"
@@ -161,6 +161,9 @@ def urxvt(configFile)
 			puts "Answer was not recognized, write 'y' or 'n'"
 		end
 	end
+	print "Internal border size (in pixels): "
+	answer = gets
+	configFile.puts "URxvt.internalBorder: #{answer}"
 	puts
 	puts "Done configuring URxvt!".green
 end
