@@ -1,0 +1,214 @@
+#!/usr/bin/ruby
+
+=begin
+Simple utility to make it easier to create Xresources configuration files.
+This script will guide the user to configure:
+1 - Colors
+2 - URxvt configuration (Scrollbar, internal border, etc ...)
+=end
+
+require 'colorize'
+
+MENU = 2
+
+# Color configuration
+def colors(configFile)
+	configFile.puts "! Background, foreground and cursor color"
+	configFile.puts
+
+	print "Hex for foreground color: "
+	color = gets
+	configFile.puts "*.foreground: #{color}"
+
+	print "Hex for background color: "
+	color = gets
+	configFile.puts "*.background: #{color}"
+
+	print "Hex for cursor color: "
+	color = gets
+	configFile.puts "*.cursorColor: #{color}"
+
+	configFile.puts
+	configFile.puts "! Black"
+
+	print "Hex for black color: "
+	color = gets
+	configFile.puts "*.color0: #{color}"
+
+	print "Hex for bright black color: "
+	color = gets
+	configFile.puts "*.color8: #{color}"
+
+	configFile.puts
+	configFile.puts "! Red"
+
+	print "Hex for "
+	print "red".red
+	print " color: "
+	color = gets
+	configFile.puts "*.color1: #{color}"
+
+	print "Hex for "
+	print "bright red".red
+	print " color: "
+	color = gets
+	configFile.puts "*.color9: #{color}"
+
+	configFile.puts
+	configFile.puts "! Green"
+
+	print "Hex for "
+	print "green".green
+	print " color: "
+	color = gets
+	configFile.puts "*.color2: #{color}"
+
+	print "Hex for "
+	print "bright green".green
+	print " color: "
+	color = gets
+	configFile.puts "*.color10: #{color}"
+
+	configFile.puts
+	configFile.puts "! Yellow"
+
+	print "Hex for "
+	print "yellow".yellow
+	print " color: "
+	color = gets
+	configFile.puts "*.color3: #{color}"
+
+	print "Hex for "
+	print "bright yellow".yellow
+	print " color: "
+	color = gets
+	configFile.puts "*.color11: #{color}"
+
+	configFile.puts
+	configFile.puts "! Blue"
+
+	print "Hex for "
+	print "blue".blue
+	print " color: "
+	color = gets
+	configFile.puts "*.color4: #{color}"
+	
+	print "Hex for "
+	print "bright blue".blue
+	print " color: "
+	color = gets
+	configFile.puts "*.color12: #{color}"
+
+	configFile.puts
+	configFile.puts "! Magenta"
+
+	print "Hex for "
+	print "magenta".magenta
+	print " color: "
+	color = gets
+	configFile.puts "*.color5: #{color}"
+
+	print "Hex for "
+	print "bright magenta".magenta
+	print " color: "
+	color = gets
+	configFile.puts "*.color13: #{color}"
+
+	configFile.puts
+	configFile.puts "! Cyan"
+
+	print "Hex for "
+	print "cyan".cyan
+	print " color: "
+	color = gets
+	configFile.puts "*.color6: #{color}"
+
+	print "Hex for "
+	print "bright cyan".cyan
+	print " color: "
+	color = gets
+	configFile.puts "*.color14: #{color}"
+
+	configFile.puts
+	configFile.puts "! White"
+
+	print "Hex for white color: "
+	color = gets
+	configFile.puts "*.color7: #{color}"
+
+	print "Hex for bright white color: "
+	color = gets
+	configFile.puts "*.color15: #{color}"
+
+	puts
+	puts "Done configuring colors!".green
+end
+
+def urxvt(configFile)
+	correct = false
+	configFile.puts
+	configFile.puts "!URxvt configuration"
+	while !correct
+		printf "Do you want to have scrollbar? (y/n): "
+		answer = gets
+		if answer.chomp == "y"
+			configFile.puts "URxvt.scrollBar: true"
+			correct = true
+		elsif answer.chomp == "n"
+			configFile.puts "URxvt.scrollBar: false"
+			correct = true;
+		else
+			puts "Answer was not recognized, write 'y' or 'n'"
+		end
+	end
+	puts
+	puts "Done configuring URxvt!".green
+end
+
+puts "Welcome to Ruby Ricer".magenta
+puts
+puts "First of all, select the location where your new config file will be saved:"
+
+path = gets
+
+print "Creating the file called '#{path.chomp}' ... "
+
+# Create a new file with the given name
+configFile = File.new( path.chomp,  File::CREAT|File::TRUNC|File::RDWR, 0644);
+puts "DONE".green
+
+configFile.puts "! Automatically created by Ruby Ricer by end222"
+configFile.puts
+
+i = MENU
+todo = [true,true]
+fin = false
+
+while i > 0 && !fin 
+	puts
+	puts "Choose what you want to configure:".yellow
+	if todo[0]
+		puts "1 - Configure colors"
+	end
+	if todo[1]
+		puts "2 - Configure URxvt"
+	end
+	puts "3 - I do not want to configure anything else"
+	puts
+	puts "Choose an option (1 - 3)"
+	option = gets
+
+	if option.to_i == 1 && todo[0]
+		colors(configFile)
+		todo[0] = false
+	elsif option.to_i == 2 && todo[1]
+		urxvt(configFile)
+		todo[1] = false
+	elsif option.to_i == 3
+		fin = true
+	else
+		puts "Couldn't recognize option: #{option}".red
+	end
+end
+
+puts "You finished configuring it! Enjoy the new configuration! :)"
