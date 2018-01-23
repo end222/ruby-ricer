@@ -5,6 +5,7 @@ Simple utility to make it easier to create Xresources configuration files.
 This script will guide the user to configure:
 1 - Colors
 2 - URxvt configuration (Scrollbar, internal border, etc ...)
+3 - Fonts
 =end
 
 require 'colorize'
@@ -147,7 +148,7 @@ end
 def urxvt(configFile)
 	correct = false
 	configFile.puts
-	configFile.puts "!URxvt configuration"
+	configFile.puts "! URxvt configuration"
 	while !correct
 		print "Do you want to have scrollbar? (y/n): "
 		answer = gets
@@ -158,7 +159,7 @@ def urxvt(configFile)
 			configFile.puts "URxvt.scrollBar: false"
 			correct = true;
 		else
-			puts "Answer was not recognized, write 'y' or 'n'"
+			puts "Answer was not recognized, write 'y' or 'n'".red
 		end
 	end
 	print "Internal border size (in pixels): "
@@ -169,6 +170,64 @@ def urxvt(configFile)
 end
 
 def fonts(configFile)
+	configFile.puts
+	configFile.puts "! Font configuration"
+	correct = false
+	while !correct
+		print "Do you want to activate antialiasing? (y/n): "
+		answer = gets
+		if answer.chomp == "y"
+			configFile.puts "Xft.antialias: true"
+			correct = true
+		elsif answer.chomp == "n"
+			configFile.puts "Xft.antialias: false"
+			correct = true
+		else
+			puts "Answer not recognized, write 'y' or 'n'".red
+		end
+	end
+	correct = false
+	while !correct
+		print "Do you want to activate autohint? (y/n): "
+		answer = gets
+		if answer.chomp == "y"
+			configFile.puts "Xft.autohint: true"
+			correct = true
+		elsif answer.chomp == "n"
+			configFile.puts "Xft.autohint: false"
+			correct = true
+		else
+			puts "Answer not recognized, write 'y' or 'n'".red
+		end
+	end
+	correct = false
+	while !correct
+		print "Do you want to activate hinting? (y/n): "
+		answer = gets
+		if answer.chomp == "y"
+			configFile.puts "Xft.hinting: true"
+			correct = true
+		elsif answer.chomp == "n"
+			configFile.puts "Xft.hinting: false"
+			correct = true
+		else
+			puts "Answer not recognized, write 'y' or 'n'".red
+		end
+	end
+	print "What hinting style do you want to use?: "
+	answer = gets
+	configFile.puts "Xft.hintstyle: #{answer}"
+	
+	print "What lcdfilter do you want to use?: "
+	answer = gets
+	configFile.puts "Xft.lcdfilter: #{answer}"
+
+	print "What rgba value do you want to use?: "
+	answer = gets
+	configFile.puts "Xft.rgba: #{answer}"
+
+	puts
+	puts "Done configuring fonts!".green
 end
 
 puts "Welcome to Ruby Ricer".magenta
