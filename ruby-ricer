@@ -10,6 +10,7 @@ This script will guide the user to configure:
 
 require 'colorize'
 
+# Number of items in the main menu
 MENU = 3
 
 # Color configuration
