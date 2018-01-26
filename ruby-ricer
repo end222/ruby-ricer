@@ -10,7 +10,7 @@ This script will guide the user to configure:
 
 require 'colorize'
 
-MENU = 2
+MENU = 3
 
 # Color configuration
 def colors(configFile)
@@ -270,12 +270,15 @@ while i > 0 && !fin
 	if option.to_i == 1 && todo[0]
 		colors(configFile)
 		todo[0] = false
+		i -= 1
 	elsif option.to_i == 2 && todo[1]
 		urxvt(configFile)
 		todo[1] = false
+		i -= 1
 	elsif option.to_i == 3 && todo[2]
 		fonts(configFile)
 		todo[2] = false
+		i -= 1
 	elsif option.to_i == 4
 		fin = true
 	else
