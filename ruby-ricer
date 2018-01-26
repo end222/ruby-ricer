@@ -13,8 +13,69 @@ require 'colorize'
 # Number of items in the main menu
 MENU = 3
 
-# Color configuration
-def colors(configFile)
+# Automatic color configuration
+def colorsAuto(configFile)
+	print "Path of the image: "
+	num = 16
+	image = gets.chomp
+	value = %x(magick #{image} -resize 25% -colors #{num} -unique-colors txt:)
+	while value.lines.count <= 16 && num < 40
+		value = %x(magick #{image} -resize 25% -colors #{num} -unique-colors txt:)
+		num += 1
+	end
+	colors = value.split("\n")
+	i = 1
+	colorValue = []
+	while i <= 16
+		colorValue << colors[i].split(" ")[2]
+		i += 1
+	end
+	configFile.puts "These colors were taken from the image #{image}"
+	configFile.puts "!Background, Foreground and Cursor color"
+	configFile.puts "*.foreground: #{colorValue[15]}"
+	configFile.puts "*.background: #{colorValue[0]}"
+	configFile.puts "*.cursorColor: #{colorValue[15]}"
+	configFile.puts
+	configFile.puts "! Black"
+	configFile.puts "*.color0: #{colorValue[0]}"
+	configFile.puts "*.color8: #{colorValue[8]}"
+	configFile.puts
+	configFile.puts "! Red"
+	configFile.puts "*.color1: #{colorValue[1]}"
+	configFile.puts "*.color9: #{colorValue[9]}"
+	configFile.puts
+	configFile.puts "! Green"
+	configFile.puts "*.color2: #{colorValue[2]}"
+	configFile.puts "*.color10: #{colorValue[10]}"
+	configFile.puts
+	configFile.puts "! Yellow"
+	configFile.puts "*.color3: #{colorValue[3]}"
+	configFile.puts "*.color11: #{colorValue[11]}"
+	configFile.puts
+	configFile.puts "! Blue"
+	configFile.puts "*.color4: #{colorValue[4]}"
+	configFile.puts "*.color12: #{colorValue[12]}"
+	configFile.puts
+	configFile.puts "! Magenta"
+	configFile.puts "*.color5: #{colorValue[5]}"
+	configFile.puts "*.color13: #{colorValue[13]}"
+	configFile.puts
+	configFile.puts "! Cyan"
+	configFile.puts "*.color6: #{colorValue[6]}"
+	configFile.puts "*.color14: #{colorValue[14]}"
+	configFile.puts
+	configFile.puts "! White"
+	configFile.puts "*.color7: #{colorValue[7]}"
+	configFile.puts "*.color15: #{colorValue[15]}"
+
+	puts
+	puts "Done configuring colors!".green
+	puts "Your new color palette is:"
+	puts colorValue
+end
+
+# Manual color configuration
+def colorsManual(configFile)
 	configFile.puts "! Background, foreground and cursor color"
 	configFile.puts
 
@@ -144,6 +205,26 @@ def colors(configFile)
 
 	puts
 	puts "Done configuring colors!".green
+end
+
+def colors(configFile)
+	puts
+	puts "How do you want to configure colors?".yellow
+	puts "M for manual configuration"
+	puts "A for automatic configuration giving an image"
+	correct = false
+	while !correct
+		answer = gets
+		if answer.chomp == "M" || answer.chomp == "m"
+			colorsManual(configFile)
+			correct = true
+		elsif answer.chomp == "A" || answer.chomp == "a"
+			colorsAuto(configFile)
+			correct = true
+		else
+			puts "Option not recognized, write 'M' or 'A'"
+		end
+	end
 end
 
 def urxvt(configFile)
