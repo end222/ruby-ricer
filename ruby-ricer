@@ -30,6 +30,10 @@ def colorsAuto(configFile)
 		colorValue << colors[i].split(" ")[2]
 		i += 1
 	end
+
+	colorValue[7] = "#EEEEEE"
+	colorValue[15] = "#EEEEEE"
+
 	configFile.puts "These colors were taken from the image #{image}"
 	configFile.puts "!Background, Foreground and Cursor color"
 	configFile.puts "*.foreground: #{colorValue[15]}"
